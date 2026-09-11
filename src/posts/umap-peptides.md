@@ -22,6 +22,8 @@ There are dozens of methods to reduce dimensionality. The two we focused on spec
 
 ## Building the visualizer
 
+PepSpace was built to let researchers upload their own `.csv` metadata and `.npy` embeddings, even letting them choose which columns correspond to peptide ID, sequence, and label if the app can't auto-detect them.
+
 PepSpace was built in Python, using:
 
 - **Streamlit**: A Python framework that turns the app into an interactive web tool in the browser
@@ -31,10 +33,96 @@ PepSpace was built in Python, using:
 - **UMAP**: The dimensionality reduction method used to visualize high-dimensional vectors
 - **scikit-learn**: Provides the trustworthiness metric used to evaluate how well the projection preserves the original data's structure
 
-<!-- technical walkthrough + code snippets -->
+### Uploading your own data
+
+Researchers can upload their own embeddings and metadata directly from the sidebar.
+
+```python
+uploaded_embeddings = st.sidebar.file_uploader("Upload embeddings (.npy)", type=["npy"])
+uploaded_metadata = st.sidebar.file_uploader("Upload metadata (.csv)", type=["csv"])
+```
+
+### Auto-detecting metadata columns
+
+If a column isn't automatically recognized, the sidebar lets the user manually select it.
+
+```python
+def pick_col(df, candidates):
+    cols_lower = {c.lower(): c for c in df.columns}
+    for cand in candidates:
+        if cand.lower() in cols_lower:
+            return cols_lower[cand.lower()]
+    return None
+```
+
+### Tuning the projection
+
+`n_neighbors` and `min_dist` control how UMAP balances local vs. global structure. 
+
+Local structure is how well individual neighborhoods are preserved, and global structure being how well the overall shape and relationships between clusters hold up. A smaller `n_neighbors` favors local detail, and a larger one favors the big picture shape, which can be adjusted from the sidebar.
+
+```python
+nn = col1.slider("##nn_slider", 2, 200, key="nn_slider")
+md = col1.slider("##md_slider", 0.0, 1.0, step=0.001, key="md_slider")
+```
+
+### Switching between UMAP and densMAP
+
+A simple toggle switches between the two projection methods.
+
+```python
+method = st.sidebar.radio("Projection Type", ["UMAP", "densMAP"], key="method_radio")
+```
+
+### Measuring embedding quality
+
+Trustworthiness scores how well the lower-dimensional projection preserves the original high-dimensional structure.
+
+```python
+trust_2d = trustworthiness(X, X_umap_2d, n_neighbors=CFG.n_neighbors)
+trust_nd = trustworthiness(X, X_umap_nd, n_neighbors=CFG.n_neighbors)
+```
+
+### Selecting a region in 2D
+
+Users can draw a box or lasso selection on the 2D plot to isolate a cluster of peptides.
+
+```python
+select_mode = st.sidebar.radio("Selection Mode", ["pan", "box", "lasso"], index=0)
+```
+
+### Linking the 2D and 3D views
+
+Whatever gets selected in 2D is stored in `session_state`, then used to highlight the same peptides on the 3D sphere.
+
+```python
+if selected_points_2d:
+    st.session_state["selected_indices"] = [p["point_index"] for p in selected_points_2d]
+```
+
+### Saving selections
+
+Selected peptides and their sphere coordinates can be exported to JSON for later use.
+
+```python
+json.dump({
+    "selected_ids": selected_df["id"].tolist(),
+}, f_out, indent=2)
+```
 
 ## What I learned
 
-<!-- reflection -->
+With this research project, I sharpened my skills by using tools I've never used before. For example, Streamlit and UMAP, two tools I've actually never heard about until starting this project. I also learned how to properly read research papers, being able to do this gave me a strong enough foundation to know what I was doing and potentially explain my work on a technical level.
 
-<!-- poster picture-->
+I grew both personally and technically with this research project, I never really thought I was competent enough to be able to work on research in general. Yet after trying it, I found that I am more than able to be able to do cool stuff. It inspired me to pursue challenging things without having regrets, I'm here to learn and be the best version of myself I can be. 
+
+I look forward to continuing this project with Dr Beltran in Fall 2026 to further refine this app. 
+
+This is just the beginning ! 
+
+## Here's the poster!
+The research poster
+
+<iframe src="/PepFinal.pdf" width="100%" height="700px" style="border: 1px solid #222; border-radius: 8px;"></iframe>
+
+[Or download the full poster (PDF)](/PepFinal.pdf)
