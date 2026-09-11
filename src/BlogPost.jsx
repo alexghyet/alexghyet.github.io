@@ -48,6 +48,9 @@ function BlogPost() {
         >
           {post.content}
         </ReactMarkdown>
+        <Link className="back-home-button" to="/">
+          Back to home
+        </Link>
       </div>
     </article>
   )

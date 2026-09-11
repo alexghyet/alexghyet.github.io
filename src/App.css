@@ -97,6 +97,22 @@
   color: #00d0ff;
 }
 
+.back-home-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 16px;
+  border: 1px solid #00d0ff;
+  border-radius: 4px;
+  color: #00d0ff !important;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.back-home-button:hover {
+  background-color: #00d0ff;
+  color: #0c0e15 !important;
+}
+
 @media (max-width: 640px) {
   .blog-post {
     width: min(100% - 32px, 900px);
