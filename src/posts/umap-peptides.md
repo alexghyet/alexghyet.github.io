@@ -24,12 +24,12 @@ There are dozens of methods to reduce dimensionality. The two we focused on spec
 
 PepSpace was built in Python, using:
 
-- **Streamlit** : A Python framework that turns the app into an interactive web tool in the browser
-- **NumPy** : Handles the embedding arrays and the math
-- **pandas** : manages peptides metadata like the IDs, sequences and AMP Labels
-- **Plotly**
-- **UMAP**
-- **scikit-learn**
+- **Streamlit**: A Python framework that turns the app into an interactive web tool in the browser
+- **NumPy**: Handles the embedding arrays and the math
+- **pandas**: Manages peptide metadata like the IDs, sequences, and AMP labels
+- **Plotly**: Allows us to implement the graphs for data visualization
+- **UMAP**: The dimensionality reduction method used to visualize high-dimensional vectors
+- **scikit-learn**: Provides the trustworthiness metric used to evaluate how well the projection preserves the original data's structure
 
 <!-- technical walkthrough + code snippets -->
 
@@ -37,6 +37,4 @@ PepSpace was built in Python, using:
 
 <!-- reflection -->
 
-## Try it yourself
-
-<!-- link to repo/demo -->
+<!-- poster picture-->
