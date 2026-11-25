@@ -1,6 +1,6 @@
 // Canvas can't read CSS custom properties cheaply every frame, so the
-// palette lives here too. Keep in sync with :root in index.css.
-export const PALETTE = {
+// palettes live here too. Keep in sync with the theme tokens in index.css.
+const dark = {
   bg: "#06080c",
   tile: "#0c1118",
   line: "#1a2330",
@@ -12,3 +12,24 @@ export const PALETTE = {
   blue: "#5aa9ff",
   amber: "#ffc857",
 };
+
+const light = {
+  bg: "#f4f6f9",
+  tile: "#ffffff",
+  line: "#e3e8ef",
+  text: "#0e1521",
+  muted: "#5d6878",
+  dim: "#8a94a3",
+  green: "#0a9a55",
+  pink: "#d61f5c",
+  blue: "#2463eb",
+  amber: "#b26b00",
+};
+
+export const PALETTES = { dark, light };
+export const PALETTE = dark;
+
+export const currentTheme = () =>
+  typeof document !== "undefined" && document.documentElement.dataset.theme === "light"
+    ? "light"
+    : "dark";

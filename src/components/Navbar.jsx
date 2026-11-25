@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { profile, sections } from "../data/profile";
+import { getTheme, setTheme } from "../lib/theme";
+import { Icon } from "./Icon";
 
 export function Logo() {
   return (
@@ -9,6 +11,31 @@ export function Logo() {
       <path d="M11 20.5 16 10l5 10.5M12.8 17h6.4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="27" cy="9.5" r="2.6" className="logo__dot" />
     </svg>
+  );
+}
+
+function ThemeToggle() {
+  const [theme, setLocal] = useState(getTheme);
+  const next = theme === "dark" ? "light" : "dark";
+  const toggle = () => {
+    setTheme(next);
+    setLocal(next);
+  };
+  return (
+    <button
+      type="button"
+      className={`theme-toggle is-${theme}`}
+      onClick={toggle}
+      aria-label={`Switch to ${next} mode`}
+      title={`Switch to ${next} mode`}
+    >
+      <span className="theme-toggle__icon theme-toggle__icon--moon">
+        <Icon name="moon" size={16} />
+      </span>
+      <span className="theme-toggle__icon theme-toggle__icon--sun">
+        <Icon name="sun" size={16} />
+      </span>
+    </button>
   );
 }
 
@@ -71,6 +98,8 @@ export default function Navbar() {
         <a className="nav__cta" href={profile.resume} target="_blank" rel="noopener noreferrer">
           resume <span aria-hidden="true">↗</span>
         </a>
+
+        <ThemeToggle />
 
         <button
           type="button"

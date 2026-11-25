@@ -45,7 +45,7 @@ export default function Projects() {
               delay={i * 80}
             >
               <article className="card project" onPointerMove={tilt} onPointerLeave={untilt}>
-                <div className="project__visual">
+                <div className="project__visual theme-dark">
                   <Visual />
                   <span className="project__hint">{p.hint}</span>
                 </div>

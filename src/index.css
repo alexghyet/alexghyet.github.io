@@ -17,6 +17,16 @@
   --blue: #5aa9ff;
   --amber: #ffc857;
 
+  --surface: var(--surface);
+  --surface-2: var(--surface-2);
+  --sheen: rgba(255, 255, 255, 0.03);
+  --sunken: rgba(0, 0, 0, 0.25);
+  --glass: var(--glass);
+  --glass-strong: rgba(6, 8, 12, 0.8);
+  --on-accent: #04110a;
+  --accent-hover: #8bf7bc;
+  --core-glow: #0e1620;
+
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
@@ -27,6 +37,66 @@
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   color-scheme: dark;
+}
+
+/* Light theme. Project visuals keep the dark tokens via .theme-dark. */
+:root[data-theme="light"] {
+  --bg: #f4f6f9;
+  --tile: #ffffff;
+  --tile-2: #f8fafc;
+  --line: #e3e8ef;
+  --line-2: #cdd5e0;
+  --text: #0e1521;
+  --soft: #334155;
+  --muted: #5d6878;
+  --dim: #8a94a3;
+
+  --green: #0a9a55;
+  --pink: #d61f5c;
+  --blue: #2463eb;
+  --amber: #b26b00;
+
+  --surface: rgba(15, 23, 42, 0.025);
+  --surface-2: rgba(15, 23, 42, 0.05);
+  --sheen: rgba(255, 255, 255, 0);
+  --sunken: rgba(15, 23, 42, 0.05);
+  --glass: rgba(255, 255, 255, 0.78);
+  --glass-strong: rgba(255, 255, 255, 0.88);
+  --on-accent: #ffffff;
+  --accent-hover: #087f46;
+  --core-glow: #fbfcfe;
+
+  color-scheme: light;
+}
+
+.theme-dark {
+  --tile: #0c1118;
+  --line: #1a2330;
+  --line-2: #263345;
+  --text: #e8eef5;
+  --soft: #c4ccd6;
+  --muted: #8a97a8;
+  --dim: #5b6879;
+  --green: #5cf2a0;
+  --pink: #ff5c8a;
+  --blue: #5aa9ff;
+  --amber: #ffc857;
+  --glass-strong: rgba(6, 8, 12, 0.8);
+  --on-accent: #04110a;
+  color: var(--text);
+}
+
+/* Smooth color crossfade while the theme switches. */
+html.theme-anim,
+html.theme-anim *:not(.theme-toggle__icon),
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition:
+    background-color 0.35s,
+    border-color 0.35s,
+    color 0.35s,
+    fill 0.35s,
+    stroke 0.35s !important;
 }
 
 *,
@@ -107,7 +177,7 @@ ol {
   padding: 8px 14px;
   border-radius: 8px;
   background: var(--green);
-  color: #04110a;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -155,7 +225,7 @@ ol {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.005)),
+    linear-gradient(180deg, var(--sheen), transparent),
     var(--tile);
 }
 
@@ -201,7 +271,7 @@ ol {
   padding: 4px 10px;
   border: 1px solid var(--line-2);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   font-family: var(--font-mono);
   font-size: 11.5px;
   color: var(--muted);
@@ -281,12 +351,12 @@ ol {
 .btn--primary {
   border-color: var(--green);
   background: var(--green);
-  color: #04110a;
+  color: var(--on-accent);
 }
 
 .btn--primary:hover {
-  background: #8bf7bc;
-  color: #04110a;
+  background: var(--accent-hover);
+  color: var(--on-accent);
   box-shadow: 0 0 32px rgba(92, 242, 160, 0.35);
 }
 
@@ -390,7 +460,7 @@ ol {
   padding: 8px 8px 8px 16px;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: rgba(8, 11, 16, 0.72);
+  background: var(--glass);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
@@ -441,7 +511,7 @@ ol {
 
 .nav__links a:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-2);
 }
 
 .nav__links a.is-active {
@@ -461,7 +531,7 @@ ol {
 
 .nav__cta:hover {
   background: var(--green);
-  color: #04110a;
+  color: var(--on-accent);
 }
 
 .nav__toggle {
@@ -541,5 +611,53 @@ ol {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Theme toggle
+------------------------------------------------------------------- */
+.theme-toggle {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 36px;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  color: var(--text);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.theme-toggle__icon {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  transition:
+    transform 0.5s var(--ease),
+    opacity 0.3s;
+}
+
+/* Show the icon for the mode you'd switch to. */
+.theme-toggle.is-dark .theme-toggle__icon--moon,
+.theme-toggle.is-light .theme-toggle__icon--sun {
+  opacity: 0;
+  transform: translateY(14px) rotate(-90deg);
+}
+
+@media (max-width: 1040px) {
+  .theme-toggle {
+    margin-left: auto;
+  }
+
+  .theme-toggle + .nav__toggle {
+    margin-left: 0;
   }
 }

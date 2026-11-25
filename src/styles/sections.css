@@ -269,7 +269,7 @@
   padding: 3px 9px;
   border: 1px solid var(--line-2);
   border-radius: 999px;
-  background: rgba(6, 8, 12, 0.7);
+  background: var(--glass-strong);
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--muted);
@@ -838,7 +838,7 @@
   padding: 8px 14px;
   border: 1px solid var(--line-2);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   font-size: 14px;
   font-weight: 500;
   color: var(--soft);
@@ -907,7 +907,7 @@
   padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   transition: border-color 0.2s, background 0.2s;
 }
 

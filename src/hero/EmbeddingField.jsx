@@ -7,14 +7,14 @@ import {
   clamp,
   prefersReducedMotion,
 } from "../lib/canvas";
-import { PALETTE } from "../lib/palette";
+import { PALETTES, currentTheme } from "../lib/palette";
 
 // A toy version of PepSpace: peptides as points in a 2D projection.
 // Hover to probe nearest neighbors, click anywhere to "re-run UMAP".
 const CLASSES = [
-  { label: "AMP", color: PALETTE.green },
-  { label: "non-AMP", color: PALETTE.pink },
-  { label: "unlabeled", color: PALETTE.blue },
+  { label: "AMP", key: "green" },
+  { label: "non-AMP", key: "pink" },
+  { label: "unlabeled", key: "blue" },
 ];
 const K = 8;
 const ALL_AA = "ACDEFGHIKLMNPQRSTVWY";
@@ -114,6 +114,8 @@ export default function EmbeddingField({ children }) {
     let clock = 0;
     let points = [];
     let ripple = null;
+    let theme = currentTheme();
+    let pal = PALETTES[theme];
 
     function assignTargets(seedValue, originX, originY) {
       const r = mulberry32(seedValue);
@@ -179,14 +181,14 @@ export default function EmbeddingField({ children }) {
     function drawAxes(ctx) {
       const x0 = 18;
       const y0 = H - 18;
-      ctx.strokeStyle = hexAlpha(PALETTE.muted, 0.35);
+      ctx.strokeStyle = hexAlpha(pal.muted, 0.35);
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x0, y0 - 34);
       ctx.lineTo(x0, y0);
       ctx.lineTo(x0 + 34, y0);
       ctx.stroke();
-      ctx.fillStyle = hexAlpha(PALETTE.muted, 0.6);
+      ctx.fillStyle = hexAlpha(pal.muted, 0.6);
       ctx.font = "500 9px 'JetBrains Mono', monospace";
       ctx.fillText("UMAP-1", x0 + 40, y0 + 3);
       ctx.save();
@@ -215,7 +217,7 @@ export default function EmbeddingField({ children }) {
       const key = p.seq + agree;
       if (key !== tipKey) {
         tipKey = key;
-        const color = CLASSES[p.cls].color;
+        const color = pal[CLASSES[p.cls].key];
         tipSeq.textContent = p.seq;
         tipSeq.style.color = color;
         tipMeta.textContent = `${CLASSES[p.cls].label} · ${agree}/${K} neighbors agree`;
@@ -239,6 +241,8 @@ export default function EmbeddingField({ children }) {
       },
       frame(ctx, w, h, dt) {
         clock += dt;
+        theme = currentTheme();
+        pal = PALETTES[theme];
         ctx.clearRect(0, 0, w, h);
 
         for (const p of points) {
@@ -272,7 +276,7 @@ export default function EmbeddingField({ children }) {
 
         const knn = pointer.active ? nearest() : [];
         knn.forEach(({ p }, i) => {
-          ctx.strokeStyle = hexAlpha(CLASSES[p.cls].color, 0.6 * (1 - i / K) + 0.1);
+          ctx.strokeStyle = hexAlpha(pal[CLASSES[p.cls].key], 0.6 * (1 - i / K) + 0.1);
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(pointer.x, pointer.y);
@@ -280,9 +284,9 @@ export default function EmbeddingField({ children }) {
           ctx.stroke();
         });
 
-        ctx.globalCompositeOperation = "lighter";
+        ctx.globalCompositeOperation = theme === "light" ? "source-over" : "lighter";
         for (const p of points) {
-          const c = CLASSES[p.cls].color;
+          const c = pal[CLASSES[p.cls].key];
           ctx.fillStyle = hexAlpha(c, p.cls === 2 ? 0.06 : 0.09);
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r * 3.2, 0, Math.PI * 2);
@@ -295,7 +299,7 @@ export default function EmbeddingField({ children }) {
         ctx.globalCompositeOperation = "source-over";
 
         for (const { p } of knn) {
-          ctx.strokeStyle = CLASSES[p.cls].color;
+          ctx.strokeStyle = pal[CLASSES[p.cls].key];
           ctx.lineWidth = 1.2;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r + 3.5, 0, Math.PI * 2);
@@ -303,7 +307,7 @@ export default function EmbeddingField({ children }) {
         }
 
         if (pointer.active) {
-          ctx.strokeStyle = hexAlpha(PALETTE.text, 0.5);
+          ctx.strokeStyle = hexAlpha(pal.text, 0.5);
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.arc(pointer.x, pointer.y, 4, 0, Math.PI * 2);
@@ -317,7 +321,7 @@ export default function EmbeddingField({ children }) {
           const alpha = Math.max(0, 0.5 - age * 0.45);
           if (alpha <= 0) ripple = null;
           else {
-            ctx.strokeStyle = hexAlpha(PALETTE.green, alpha);
+            ctx.strokeStyle = hexAlpha(pal.green, alpha);
             ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.arc(ripple.x, ripple.y, radius, 0, Math.PI * 2);
@@ -375,7 +379,7 @@ export default function EmbeddingField({ children }) {
       <div className="embed__legend" aria-hidden="true">
         {CLASSES.map((c) => (
           <span key={c.label}>
-            <i style={{ background: c.color }} />
+            <i style={{ background: `var(--${c.key})` }} />
             {c.label}
           </span>
         ))}

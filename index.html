@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#06080c" />
+    <script>
+      // Apply the saved theme before first paint. Dark is the default.
+      (function () {
+        var theme = "dark";
+        try {
+          if (localStorage.getItem("theme") === "light") theme = "light";
+        } catch (e) {}
+        document.documentElement.dataset.theme = theme;
+        if (theme === "light") {
+          document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f4f6f9");
+        }
+      })();
+    </script>
     <meta
       name="description"
       content="Alejandro Lopez: Computer Science student at Cal State LA turning high-dimensional data into tools people can explore."

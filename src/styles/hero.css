@@ -30,7 +30,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(180deg, var(--sheen), transparent 40%),
     var(--tile);
   transition: border-color 0.3s, transform 0.4s var(--ease);
   animation: tile-in 0.9s var(--ease) both;
@@ -120,7 +120,7 @@
   padding: 2px 9px;
   border: 1px solid var(--line-2);
   border-radius: 999px;
-  background: rgba(6, 8, 12, 0.6);
+  background: var(--glass-strong);
   font-size: 10px;
   color: var(--muted);
 }
@@ -199,7 +199,7 @@
 ------------------------------------------------------------------- */
 .tile--core {
   container-type: inline-size;
-  background: radial-gradient(ellipse at 50% 50%, #0e1620, var(--tile) 72%);
+  background: radial-gradient(ellipse at 50% 50%, var(--core-glow), var(--tile) 72%);
 }
 
 .embed {
@@ -236,17 +236,28 @@
   inset: 24% 10%;
   z-index: -1;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(6, 8, 12, 0.85), rgba(6, 8, 12, 0.4) 60%, transparent);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--bg) 85%, transparent),
+    color-mix(in srgb, var(--bg) 40%, transparent) 60%,
+    transparent
+  );
   filter: blur(6px);
 }
 
 .core__kicker {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  padding: 5px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--glass-strong);
+  backdrop-filter: blur(6px);
   font-family: var(--font-mono);
-  font-size: clamp(10px, 1.8cqi, 12px);
-  letter-spacing: 0.16em;
+  font-size: clamp(10.5px, 1.9cqi, 13px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--text);
 }
 
 .core__name {
@@ -302,7 +313,7 @@
   padding: 7px 10px;
   border: 1px solid var(--line-2);
   border-radius: 8px;
-  background: rgba(7, 10, 14, 0.9);
+  background: var(--glass-strong);
   backdrop-filter: blur(4px);
   font-family: var(--font-mono);
   white-space: nowrap;
@@ -361,7 +372,7 @@
   padding: 5px 12px;
   border: 1px solid var(--line-2);
   border-radius: 999px;
-  background: rgba(6, 8, 12, 0.7);
+  background: var(--glass-strong);
   backdrop-filter: blur(6px);
   font-family: var(--font-mono);
   font-size: 10.5px;
@@ -498,7 +509,7 @@
   padding: 9px 10px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
 }
 
 .t-stats b {
@@ -613,7 +624,7 @@
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--sunken);
 }
 
 .t-skills__tabs button {
@@ -646,7 +657,7 @@
   padding: 6px 11px;
   border: 1px solid var(--line-2);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   font-size: 13px;
   font-weight: 500;
   animation: chip-in 0.45s var(--ease) both;
@@ -928,7 +939,7 @@
   padding: 7px 12px;
   border: 1px solid var(--line-2);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface);
   font-size: 13.5px;
   font-weight: 500;
   transition:
