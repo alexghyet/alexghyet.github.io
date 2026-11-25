@@ -6,7 +6,7 @@ export const profile = {
   firstName: "Alejandro",
   lastName: "Lopez",
   kicker: "Computer Science · Cal State LA",
-  tagline: "I turn high-dimensional data into tools people can explore.",
+  tagline: "I like CS and Bio :)",
   aboutShort:
     "CS student at Cal State LA with a minor in Biomedical Engineering. I like data, machine learning, and building things people can actually use.",
   location: "Los Angeles",
