@@ -1,21 +1,30 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Navbar from "./Navbar";
-import Hero from "./Hero";
-import About from "./About";
-import Project from "./Project";
-import Blog from "./Blog";
-import BlogPost from "./BlogPost";
+import Navbar from "./components/Navbar";
+import BentoHero from "./hero/BentoHero";
+import About from "./sections/About";
+import Research from "./sections/Research";
+import Projects from "./sections/Projects";
+import Leadership from "./sections/Leadership";
+import Skills from "./sections/Skills";
+import Blog from "./sections/Blog";
+import Contact from "./sections/Contact";
+
+// Markdown + syntax highlighting are heavy, so only load them on post pages.
+const BlogPost = lazy(() => import("./pages/BlogPost"));
 
 function MainPage() {
   return (
-    <div>
-      <Navbar />
-      <Hero />
+    <main id="main">
+      <BentoHero />
       <About />
-      <Project />
+      <Research />
+      <Projects />
+      <Leadership />
+      <Skills />
       <Blog />
-    </div>
+      <Contact />
+    </main>
   );
 }
 
@@ -36,10 +45,22 @@ function ScrollToTop() {
 function App() {
   return (
     <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <ScrollToTop />
+      <div className="backdrop" aria-hidden="true" />
+      <Navbar />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route
+          path="/blog/:slug"
+          element={
+            <Suspense fallback={<main id="main" className="blog-post" />}>
+              <BlogPost />
+            </Suspense>
+          }
+        />
       </Routes>
     </>
   );
